@@ -49,7 +49,18 @@ function App() {
       const [min, max] = ranges[key as keyof typeof ranges];
       const value = formData[key as keyof typeof formData];
       if (value < min || value > max) {
-        toast.error(`${key.replace('_', ' ')} harus di antara ${min} dan ${max}`);
+        let label = '';
+        switch (key) {
+          case 'Age': label = 'Usia'; break;
+          case 'Height': label = 'Tinggi Badan'; break;
+          case 'Weight': label = 'Berat Badan'; break;
+          case 'Duration': label = 'Durasi'; break;
+          case 'Heart_Rate': label = 'Detak Jantung'; break;
+          case 'Body_Temp': label = 'Suhu Tubuh'; break;
+          case 'Gender': label = 'Jenis Kelamin'; break;
+          default: label = key;
+        }
+        toast.error(`${label} harus di antara ${min} sampai ${max}`);
         return;
       }
     }
