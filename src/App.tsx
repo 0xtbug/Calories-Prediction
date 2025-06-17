@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Activity, Brain, BarChart3, Target, Users, Clock, Heart, Thermometer, Weight, Ruler, User } from 'lucide-react';
+import { Toaster, toast } from 'sonner';
 
 interface PredictionData {
   Gender: number;
@@ -35,6 +36,23 @@ function App() {
   };
 
   const handlePredict = async () => {
+    const ranges = {
+      Age: [10, 80],
+      Height: [120, 220],
+      Weight: [40, 120],
+      Duration: [5, 180],
+      Heart_Rate: [60, 200],
+      Body_Temp: [36, 40],
+      Gender: [0, 1],
+    };
+    for (const key in ranges) {
+      const [min, max] = ranges[key as keyof typeof ranges];
+      const value = formData[key as keyof typeof formData];
+      if (value < min || value > max) {
+        toast.error(`${key.replace('_', ' ')} harus di antara ${min} dan ${max}`);
+        return;
+      }
+    }
     setIsLoading(true);
     setError(null);
 
@@ -91,6 +109,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <Toaster position="top-center" richColors />
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-white/20 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
